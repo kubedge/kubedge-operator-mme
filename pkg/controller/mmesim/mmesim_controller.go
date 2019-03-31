@@ -22,6 +22,7 @@ import (
 	av1 "github.com/kubedge/kubedge-operator-base/pkg/apis/kubedgeoperators/v1alpha1"
 	bcontroller "github.com/kubedge/kubedge-operator-base/pkg/controller/kubedgecontroller"
 	bmgr "github.com/kubedge/kubedge-operator-base/pkg/kubedgemanager"
+	mmesimmgr "github.com/kubedge/kubedge-operator-mme/pkg/mmesim"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -53,7 +54,7 @@ func newMMESimReconciler(mgr manager.Manager) reconcile.Reconciler {
 			Client:         mgr.GetClient(),
 			Scheme:         mgr.GetScheme(),
 			Recorder:       mgr.GetRecorder("mmesim-recorder"),
-			ManagerFactory: bmgr.NewManagerFactory(mgr),
+			ManagerFactory: mmesimmgr.NewManagerFactory(mgr),
 			// reconcilePeriod: flags.ReconcilePeriod,
 		},
 	}

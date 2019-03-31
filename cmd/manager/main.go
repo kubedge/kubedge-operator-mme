@@ -8,7 +8,7 @@ import (
 	"runtime"
 
 	"github.com/kubedge/kubedge-operator-base/pkg/apis"
-	"github.com/kubedge/kubedge-operator-base/pkg/controller"
+	"github.com/kubedge/kubedge-operator-mme/pkg/controller"
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	"github.com/operator-framework/operator-sdk/pkg/leader"
 	"github.com/operator-framework/operator-sdk/pkg/metrics"

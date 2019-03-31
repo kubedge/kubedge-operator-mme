@@ -330,7 +330,6 @@
   packages = [
     "pkg/apis",
     "pkg/apis/kubedgeoperators/v1alpha1",
-    "pkg/controller",
     "pkg/controller/kubedgecontroller",
     "pkg/kubedgemanager",
   ]
@@ -1091,7 +1090,6 @@
     "github.com/ghodss/yaml",
     "github.com/kubedge/kubedge-operator-base/pkg/apis",
     "github.com/kubedge/kubedge-operator-base/pkg/apis/kubedgeoperators/v1alpha1",
-    "github.com/kubedge/kubedge-operator-base/pkg/controller",
     "github.com/kubedge/kubedge-operator-base/pkg/controller/kubedgecontroller",
     "github.com/kubedge/kubedge-operator-base/pkg/kubedgemanager",
     "github.com/onsi/ginkgo",
