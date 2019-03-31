@@ -1,0 +1,135 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: mmesims.kubedgeoperators.kubedge.cloud
+spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.succeeded
+    description: Succeeded
+    name: Succeeded
+    type: boolean
+  group: kubedgeoperators.kubedge.cloud
+  names:
+    kind: MMESim
+    plural: mmesims
+    shortNames:
+    - osrbck
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            openstackServiceEndPoint:
+              description: Openstack Service EndPoint
+              type: string
+            openstackServiceName:
+              description: Openstack Service Name
+              type: string
+            source:
+              description: provide a path to a ``git repo``, ``local dir``, or ``tarball
+                url`` chart
+              properties:
+                authMethod:
+                  description: (optional) authentication method
+                  type: string
+                location:
+                  description: '``url`` or ``path`` to the chart''s parent directory'
+                  type: string
+                proxyServer:
+                  description: (optional) http proxy server
+                  type: string
+                reference:
+                  description: (optional) branch, commit, or reference in the repo
+                    (``master`` if not specified)
+                  type: string
+                subpath:
+                  description: (optional) relative path to target chart from parent
+                    (``.`` if not specified)
+                  type: string
+                type:
+                  description: 'source to build the chart: ``git``, ``local``, or
+                    ``tar``'
+                  type: string
+              required:
+              - location
+              - subpath
+              - type
+              type: object
+            targetOpenstackServiceVersion:
+              description: OpenstackServiceVersion is the version of the openstack
+                service.
+              type: string
+            targetState:
+              description: Target state of the Kubedge Custom Resources
+              type: string
+          required:
+          - source
+          - openstackServiceName
+          - targetState
+          type: object
+        status:
+          properties:
+            actualOpenstackServiceVersion:
+              description: OpenstackVersion is the version of the backup openstack
+                server.
+              type: string
+            conditions:
+              description: List of conditions and states related to the resource.
+              items:
+                properties:
+                  lastTransitionTime:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                  resourceName:
+                    type: string
+                  resourceVersion:
+                    format: int32
+                    type: integer
+                  status:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - type
+                - status
+                type: object
+              type: array
+            reason:
+              description: Reason indicates the reason for any related failures.
+              type: string
+            satisfied:
+              description: Succeeded indicates if the release's ActualState satisfies
+                its target state
+              type: boolean
+          required:
+          - satisfied
+          type: object
+  version: v1alpha1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

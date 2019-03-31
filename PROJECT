@@ -1,0 +1,4 @@
+version: "1"
+domain: kubedge.cloud
+output-dir: deploy/crds
+repo: github.com/kubedge/kubedge-operator-mme
