@@ -37,32 +37,80 @@ spec:
           type: object
         spec:
           properties:
-            openstackServiceEndPoint:
-              description: Openstack Service EndPoint
-              type: string
-            openstackServiceName:
-              description: Openstack Service Name
-              type: string
+            fsbs:
+              description: FSBs describes the set of FSB deployed in the simulator
+              properties:
+                replicas:
+                  description: number of replicas
+                  format: int32
+                  type: integer
+                selector:
+                  description: selector
+                  type: object
+                template:
+                  description: pod template
+                  type: object
+              required:
+              - selector
+              - template
+              type: object
+            gpbs:
+              description: GPBs describes the set of GPB deployed in the simulator
+              properties:
+                replicas:
+                  description: number of replicas
+                  format: int32
+                  type: integer
+                selector:
+                  description: selector
+                  type: object
+                template:
+                  description: pod template
+                  type: object
+              required:
+              - selector
+              - template
+              type: object
+            lcs:
+              description: LCs describes the set of LC deployed in the simulator
+              properties:
+                replicas:
+                  description: number of replicas
+                  format: int32
+                  type: integer
+                selector:
+                  description: selector
+                  type: object
+                template:
+                  description: pod template
+                  type: object
+              required:
+              - selector
+              - template
+              type: object
+            ncbs:
+              description: NCBs describes the set of NCB deployed in the simulator
+              properties:
+                replicas:
+                  description: number of replicas
+                  format: int32
+                  type: integer
+                selector:
+                  description: selector
+                  type: object
+                template:
+                  description: pod template
+                  type: object
+              required:
+              - selector
+              - template
+              type: object
             source:
               description: provide a path to a ``git repo``, ``local dir``, or ``tarball
                 url`` chart
               properties:
-                authMethod:
-                  description: (optional) authentication method
-                  type: string
                 location:
                   description: '``url`` or ``path`` to the chart''s parent directory'
-                  type: string
-                proxyServer:
-                  description: (optional) http proxy server
-                  type: string
-                reference:
-                  description: (optional) branch, commit, or reference in the repo
-                    (``master`` if not specified)
-                  type: string
-                subpath:
-                  description: (optional) relative path to target chart from parent
-                    (``.`` if not specified)
                   type: string
                 type:
                   description: 'source to build the chart: ``git``, ``local``, or
@@ -70,26 +118,19 @@ spec:
                   type: string
               required:
               - location
-              - subpath
               - type
               type: object
-            targetOpenstackServiceVersion:
-              description: OpenstackServiceVersion is the version of the openstack
-                service.
-              type: string
             targetState:
               description: Target state of the Kubedge Custom Resources
               type: string
           required:
           - source
-          - openstackServiceName
           - targetState
           type: object
         status:
           properties:
-            actualOpenstackServiceVersion:
-              description: OpenstackVersion is the version of the backup openstack
-                server.
+            actualState:
+              description: Actual state of the Kubedge Custom Resources
               type: string
             conditions:
               description: List of conditions and states related to the resource.
@@ -125,6 +166,7 @@ spec:
               type: boolean
           required:
           - satisfied
+          - actualState
           type: object
   version: v1alpha1
 status:
