@@ -71,7 +71,7 @@ func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceMana
 	return &rollbackmanager{
 		KubedgeBaseManager: bmgr.KubedgeBaseManager{
 			KubeClient:     f.kubeClient,
-			Renderer:       bmgr.NewOwnerRefRenderer(ownerRefs, "osrbck", renderFiles, renderValues),
+			Renderer:       bmgr.NewKubedgeBaseRenderer(ownerRefs, "mmesim", renderFiles, renderValues),
 			Source:         r.Spec.Source,
 			PhaseName:      r.GetName(),
 			PhaseNamespace: r.GetNamespace()},
