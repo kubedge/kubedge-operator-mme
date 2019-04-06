@@ -13,13 +13,13 @@ spec:
       labels:
         name: kubedge-mme-operator
     spec:
-      serviceAccountName: kubedge-mme-operator
+      serviceAccountName: kubedge-operator
       containers:
         - name: kubedge-mme-operator
           # Replace this with the built image name
           image: {{ .Values.images.tags.operator }}
           command:
-          - kubedge-mme-operator
+          - /usr/local/bin/kubedge-mme-operator
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           env:
             - name: WATCH_NAMESPACE

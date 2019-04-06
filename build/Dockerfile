@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.9
 
 ENV OPERATOR=/usr/local/bin/kubedge-mme-operator \
     USER_UID=1001 \
@@ -11,7 +11,7 @@ COPY build/bin /usr/local/bin
 
 RUN  /usr/local/bin/user_setup
 
-COPY build/test-pods /opt/kubedge-operators/test-pods
+COPY build/mme-templates /opt/kubedge-operators/mme-templates
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 

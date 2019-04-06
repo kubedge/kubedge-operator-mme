@@ -6,7 +6,7 @@ spec:
   targetState: deployed
   source:
     type: local
-    location: /opt/kubedge-operators/test-pods/busybox.yaml
+    location: /opt/kubedge-operators/mme-templates/busybox.yaml
   fsbs:
     replicas: 1
     selector:
