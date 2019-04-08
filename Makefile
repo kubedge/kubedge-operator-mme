@@ -11,6 +11,7 @@ IMG_DEV          ?= ${DHUBREPO_DEV}:v${VERSION_V1}
 IMG_AMD64        ?= ${DHUBREPO_AMD64}:v${VERSION_V1}
 IMG_ARM32V7      ?= ${DHUBREPO_ARM32V7}:v${VERSION_V1}
 IMG_ARM64V8      ?= ${DHUBREPO_ARM64V8}:v${VERSION_V1}
+K8S_NAMESPACE    ?= default
 
 all: docker-build
 
@@ -91,16 +92,16 @@ docker-push-arm64v8:
 install: install-dev
 
 install-dev: docker-build-dev
-	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_DEV}
+	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_DEV} --namespace ${K8S_NAMESPACE}
 
 install-amd64:
-	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_AMD64}
+	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_AMD64},images.pull_policy=Always --namespace ${K8S_NAMESPACE}
 
 install-arm32v7:
-	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_ARM32V7}
+	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_ARM32V7},images.pull_policy=Always --namespace ${K8S_NAMESPACE}
 
 install-arm64v8:
-	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_ARM64V8}
+	helm install --name kubedge-mme-operator chart --set images.tags.operator=${IMG_ARM64V8},images.pull_policy=Always --namespace ${K8S_NAMESPACE}
 
 purge: setup
 	helm delete --purge kubedge-mme-operator

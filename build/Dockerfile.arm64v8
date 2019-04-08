@@ -15,5 +15,5 @@
 FROM scratch
 ADD build/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ADD build/_output/arm64v8/kubedge-mme-operator /usr/local/bin/kubedge-mme-operator
-ADD build/mme-templates /opt/kubedge-operators/mme-templates
+ADD build/mmesim-templates /opt/kubedge-operators/mmesim-templates
 CMD ["/usr/local/bin/kubedge-mme-operator"]

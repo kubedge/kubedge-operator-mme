@@ -11,7 +11,7 @@ COPY build/bin /usr/local/bin
 
 RUN  /usr/local/bin/user_setup
 
-COPY build/mme-templates /opt/kubedge-operators/mme-templates
+COPY build/mmesim-templates /opt/kubedge-operators/mmesim-templates
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 

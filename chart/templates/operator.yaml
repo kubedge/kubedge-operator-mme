@@ -13,7 +13,7 @@ spec:
       labels:
         name: kubedge-mme-operator
     spec:
-      serviceAccountName: kubedge-operator
+      serviceAccountName: kubedge-mme-operator
       containers:
         - name: kubedge-mme-operator
           # Replace this with the built image name
