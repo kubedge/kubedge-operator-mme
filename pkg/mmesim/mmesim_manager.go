@@ -21,15 +21,20 @@ import (
 	bmgr "github.com/kubedge/kubedge-operator-base/pkg/kubedgemanager"
 )
 
-type rollbackmanager struct {
+type mmesimmgr struct {
 	bmgr.KubedgeBaseManager
 
 	spec   av1.MMESimSpec
 	status *av1.MMESimStatus
 }
 
+// Render a chart or just a file
+// func (m mmesimmgr) BaseRender(ctx context.Context) (*av1.SubResourceList, error) {
+//	return m.Renderer.RenderFile(m.PhaseName, m.PhaseNamespace, m.Source.Location)
+// }
+
 // Sync retrieves from K8s the sub resources (Workflow, Job, ....) attached to this MMESim CR
-func (m *rollbackmanager) Sync(ctx context.Context) error {
+func (m *mmesimmgr) Sync(ctx context.Context) error {
 
 	m.DeployedSubResourceList = av1.NewSubResourceList(m.PhaseNamespace, m.PhaseName)
 
@@ -51,21 +56,21 @@ func (m *rollbackmanager) Sync(ctx context.Context) error {
 }
 
 // InstallResource creates K8s sub resources (Workflow, Job, ....) attached to this MMESim CR
-func (m rollbackmanager) InstallResource(ctx context.Context) (*av1.SubResourceList, error) {
+func (m mmesimmgr) InstallResource(ctx context.Context) (*av1.SubResourceList, error) {
 	return m.BaseInstallResource(ctx)
 }
 
 // InstallResource updates K8s sub resources (Workflow, Job, ....) attached to this MMESim CR
-func (m rollbackmanager) UpdateResource(ctx context.Context) (*av1.SubResourceList, *av1.SubResourceList, error) {
+func (m mmesimmgr) UpdateResource(ctx context.Context) (*av1.SubResourceList, *av1.SubResourceList, error) {
 	return m.BaseUpdateResource(ctx)
 }
 
 // ReconcileResource creates or patches resources as necessary to match this MMESim CR
-func (m rollbackmanager) ReconcileResource(ctx context.Context) (*av1.SubResourceList, error) {
+func (m mmesimmgr) ReconcileResource(ctx context.Context) (*av1.SubResourceList, error) {
 	return m.BaseReconcileResource(ctx)
 }
 
 // UninstallResource delete K8s sub resources (Workflow, Job, ....) attached to this MMESim CR
-func (m rollbackmanager) UninstallResource(ctx context.Context) (*av1.SubResourceList, error) {
+func (m mmesimmgr) UninstallResource(ctx context.Context) (*av1.SubResourceList, error) {
 	return m.BaseUninstallResource(ctx)
 }

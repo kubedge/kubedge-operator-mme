@@ -25,7 +25,7 @@ spec:
           ports:
             - containerPort: 8082
   gpbs:
-    replicas: 1
+    replicas: 4
     selector:
       matchLabels:
         name: gpb

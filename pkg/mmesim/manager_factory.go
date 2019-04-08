@@ -53,11 +53,6 @@ func (f managerFactory) NewArpscanManager(r *av1.Arpscan) bmgr.KubedgeResourceMa
 	return nil
 }
 
-// NewECDSClusterManager returns a new manager capable of controlling ECDSCluster phase of the service lifecyle
-func (f managerFactory) NewECDSClusterManager(r *av1.ECDSCluster) bmgr.KubedgeResourceManager {
-	return nil
-}
-
 // NewMMESimManager returns a new manager capable of controlling MMESim phase of the service lifecyle
 func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceManager {
 	controllerRef := metav1.NewControllerRef(r, r.GroupVersionKind())
@@ -68,10 +63,10 @@ func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceMana
 	renderFiles := initRenderFiles(av1.PhaseRollback)
 	renderValues := initRenderValues(av1.PhaseRollback)
 
-	return &rollbackmanager{
+	return &mmesimmgr{
 		KubedgeBaseManager: bmgr.KubedgeBaseManager{
 			KubeClient:     f.kubeClient,
-			Renderer:       bmgr.NewKubedgeBaseRenderer(ownerRefs, "mmesim", renderFiles, renderValues),
+			Renderer:       NewMMESimRenderer(ownerRefs, "mmesim", renderFiles, renderValues, r.Spec),
 			Source:         r.Spec.Source,
 			PhaseName:      r.GetName(),
 			PhaseNamespace: r.GetNamespace()},
@@ -79,4 +74,9 @@ func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceMana
 		spec:   r.Spec,
 		status: &r.Status,
 	}
+}
+
+// NewECDSClusterManager returns a new manager capable of controlling ECDSCluster phase of the service lifecyle
+func (f managerFactory) NewECDSClusterManager(r *av1.ECDSCluster) bmgr.KubedgeResourceManager {
+	return nil
 }
