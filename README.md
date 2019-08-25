@@ -1,2 +1,3 @@
-# kubedge-base-operator
-Common Functinalities of Kubedge Operators
+# kubedge-operator-mme
+
+Operator to deploy KUBEDGE MME Simulator
