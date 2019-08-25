@@ -53,7 +53,7 @@ func newMMESimReconciler(mgr manager.Manager) reconcile.Reconciler {
 		KubedgeBaseReconciler: bcontroller.KubedgeBaseReconciler{
 			Client:         mgr.GetClient(),
 			Scheme:         mgr.GetScheme(),
-			Recorder:       mgr.GetRecorder("mmesim-recorder"),
+			Recorder:       mgr.GetEventRecorderFor("mmesim-recorder"),
 			ManagerFactory: mmesimmgr.NewManagerFactory(mgr),
 			// reconcilePeriod: flags.ReconcilePeriod,
 		},

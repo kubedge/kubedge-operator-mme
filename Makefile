@@ -47,8 +47,8 @@ vet-v1: fmt
 
 # Generate code
 generate: setup
-	go run vendor/sigs.k8s.io/controller-tools/cmd/controller-gen/main.go crd --output-dir ./chart/templates/ --domain kubedge.cloud
-	go run vendor/k8s.io/code-generator/cmd/deepcopy-gen/main.go --input-dirs github.com/kubedge/kubedge-operator-mme/pkg/apis/kubedgeoperators/v1alpha1 -O zz_generated.deepcopy --bounding-dirs github.com/kubedge/kubedge-operator-mme/pkg/apis
+	GO111MODULE=on controller-gen crd paths=./pkg/apis/kubedgeoperators/... crd:trivialVersions=true output:crd:dir=./chart/templates/ output:none
+	GO111MODULE=on controller-gen object paths=./pkg/apis/kubedgeoperators/... output:object:dir=./pkg/apis/kubedgeoperators/v1alpha1 output:none
 
 # Build the docker image
 docker-build: fmt vet-v1 docker-build-dev docker-build-amd64 docker-build-arm32v7 docker-build-arm64v8
