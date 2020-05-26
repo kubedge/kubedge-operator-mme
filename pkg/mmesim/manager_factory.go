@@ -76,6 +76,11 @@ func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceMana
 	}
 }
 
+// NewEMBBSliceManager returns a new manager capable of controlling EMBBSlice phase of the service lifecyle
+func (f managerFactory) NewEMBBSliceManager(r *av1.EMBBSlice) bmgr.KubedgeResourceManager {
+	return nil
+}
+
 // NewECDSClusterManager returns a new manager capable of controlling ECDSCluster phase of the service lifecyle
 func (f managerFactory) NewECDSClusterManager(r *av1.ECDSCluster) bmgr.KubedgeResourceManager {
 	return nil
