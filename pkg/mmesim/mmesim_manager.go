@@ -35,24 +35,7 @@ type mmesimmgr struct {
 
 // Sync retrieves from K8s the sub resources (Workflow, Job, ....) attached to this MMESim CR
 func (m *mmesimmgr) Sync(ctx context.Context) error {
-
-	m.DeployedSubResourceList = av1.NewSubResourceList(m.PhaseNamespace, m.PhaseName)
-
-	rendered, deployed, err := m.BaseSync(ctx)
-	if err != nil {
-		return err
-	}
-
-	m.DeployedSubResourceList = deployed
-	if len(rendered.Items) != len(deployed.Items) {
-		m.IsInstalledFlag = false
-		m.IsUpdateRequiredFlag = false
-	} else {
-		m.IsInstalledFlag = true
-		m.IsUpdateRequiredFlag = false
-	}
-
-	return nil
+	return m.BaseSync(ctx)
 }
 
 // InstallResource creates K8s sub resources (Workflow, Job, ....) attached to this MMESim CR
