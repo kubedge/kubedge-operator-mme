@@ -12,9 +12,10 @@ import (
 	"github.com/kubedge/kubedge-operator-mme/pkg/controller"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
+	logf "sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
-	"sigs.k8s.io/controller-runtime/pkg/runtime/signals"
+	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
 
 // Change below variables to serve metrics on different host or port.
@@ -26,13 +27,15 @@ func printVersion() {
 }
 
 func main() {
+	opts := zap.Options{}
+	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
 
 	// The logger instantiated here can be changed to any logger
 	// implementing the logr.Logger interface. This logger will
 	// be propagated through the whole operator, generating
 	// uniform and structured logs.
-	logf.SetLogger(logf.ZapLogger(false))
+	logf.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
 	printVersion()
 
