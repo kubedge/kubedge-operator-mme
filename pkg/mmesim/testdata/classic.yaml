@@ -1,0 +1,168 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fsb
+  # namespace: mmesim
+  labels:
+    app: fsb
+spec:
+  ports:
+  - port: 80
+    name: fsb
+  clusterIP: None
+  selector:
+    app: fsb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fsb
+  # namespace: mmesim
+spec:
+  selector:
+    matchLabels:
+      app: fsb # has to match .spec.template.metadata.labels
+  serviceName: fsb
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: fsb # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: fsb
+        image: busybox
+        command:
+        - sleep
+        - "3600"
+        ports:
+        - containerPort: 80
+          name: fsb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gpb
+  # namespace: mmesim
+  labels:
+    app: gpb
+spec:
+  ports:
+  - port: 80
+    name: gpb
+  clusterIP: None
+  selector:
+    app: gpb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gpb
+  # namespace: mmesim
+spec:
+  selector:
+    matchLabels:
+      app: gpb # has to match .spec.template.metadata.labels
+  serviceName: gpb
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: gpb # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: gpb
+        image: busybox
+        command:
+        - sleep
+        - "3600"
+        ports:
+        - containerPort: 80
+          name: gpb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lc
+  # namespace: mmesim
+  labels:
+    app: lc
+spec:
+  ports:
+  - port: 80
+    name: lc
+  clusterIP: None
+  selector:
+    app: lc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lc
+  # namespace: mmesim
+spec:
+  selector:
+    matchLabels:
+      app: lc # has to match .spec.template.metadata.labels
+  serviceName: lc
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: lc # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: lc
+        image: busybox
+        command:
+        - sleep
+        - "3600"
+        ports:
+        - containerPort: 80
+          name: lc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ncb
+  # namespace: mmesim
+  labels:
+    app: ncb
+spec:
+  ports:
+  - port: 80
+    name: ncb
+  clusterIP: None
+  selector:
+    app: ncb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ncb
+  # namespace: mmesim
+spec:
+  selector:
+    matchLabels:
+      app: ncb # has to match .spec.template.metadata.labels
+  serviceName: ncb
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: ncb # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: ncb
+        image: busybox
+        command:
+        - sleep
+        - "3600"
+        ports:
+        - containerPort: 80
+          name: ncb

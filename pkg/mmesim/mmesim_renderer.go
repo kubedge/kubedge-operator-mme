@@ -106,3 +106,14 @@ func NewMMESimRenderer(refs []metav1.OwnerReference, suffix string,
 		spec: spec,
 	}
 }
+
+// NewBaseRenderer creates a new OwnerRef engine with a set of metav1.OwnerReferences to be added to assets
+func NewBaseRenderer(refs []metav1.OwnerReference, suffix string,
+	renderFiles []string, renderValues map[string]interface{}) bmgr.KubedgeResourceRenderer {
+	return bmgr.KubedgeBaseRenderer{
+		Refs:         refs,
+		Suffix:       suffix,
+		RenderFiles:  renderFiles,
+		RenderValues: renderValues,
+	}
+}

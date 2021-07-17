@@ -1,0 +1,77 @@
+apiVersion: kubedgeoperators.kubedge.cloud/v1alpha1
+kind: MMESim
+metadata:
+  name: kubedge-mmesim-cluster
+spec:
+  targetState: deployed
+  source:
+    type: local
+    location: /opt/kubedge-operators/mmesim-templates/classic.yaml
+  fsbs:
+    replicas: 66
+    selector:
+      matchLabels:
+        name: fsb
+    template:
+      metadata:
+        labels:
+          name: fsb
+      spec:
+        containers:
+        - name: fsb
+          image: hack4easy/mmesim-fsb-dev:v0.1.0
+          imagePullPolicy: IfNotPresent
+          command: ["/mmesim-fsb"]
+          ports:
+            - containerPort: 8082
+  gpbs:
+    replicas: 77
+    selector:
+      matchLabels:
+        name: gpb
+    template:
+      metadata:
+        labels:
+          name: gpb
+      spec:
+        containers:
+        - name: gpb
+          image: hack4easy/mmesim-gpb-dev:v0.1.0
+          imagePullPolicy: IfNotPresent
+          command: ["/mmesim-gpb"]
+          ports:
+            - containerPort: 8083
+  lcs:
+    replicas: 88
+    selector:
+      matchLabels:
+        name: foobar
+    template:
+      metadata:
+        labels:
+          name: lc
+      spec:
+        containers:
+        - name: lc
+          image: hack4easy/mmesim-lc-dev:v0.1.0
+          imagePullPolicy: IfNotPresent
+          command: ["/mmesim-lc"]
+          ports:
+            - containerPort: 8084
+  ncbs:
+    replicas: 99
+    selector:
+      matchLabels:
+        name: ncb
+    template:
+      metadata:
+        labels:
+          name: ncb
+      spec:
+        containers:
+        - name: ncb
+          image: hack4easy/mmesim-ncb-dev:v0.1.0
+          imagePullPolicy: IfNotPresent
+          command: ["/mmesim-ncb"]
+          ports:
+            - containerPort: 8085
