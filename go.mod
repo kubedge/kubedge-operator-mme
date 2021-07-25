@@ -3,7 +3,7 @@ module github.com/kubedge/kubedge-operator-mme
 go 1.16
 
 require (
-	github.com/kubedge/kubedge-operator-base v0.1.21-kubedge.20210724
+	github.com/kubedge/kubedge-operator-base v0.1.21-kubedge.20210725
 	k8s.io/api v0.21.3
 	k8s.io/apimachinery v0.21.3
 	k8s.io/client-go v0.21.3

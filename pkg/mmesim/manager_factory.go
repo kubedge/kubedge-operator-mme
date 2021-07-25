@@ -65,11 +65,16 @@ func (f managerFactory) NewMMESimManager(r *av1.MMESim) bmgr.KubedgeResourceMana
 
 	return &mmesimmgr{
 		KubedgeBaseManager: bmgr.KubedgeBaseManager{
-			KubeClient:     f.kubeClient,
-			Renderer:       NewMMESimRenderer(ownerRefs, "mmesim", renderFiles, renderValues, r.Spec),
-			Source:         r.Spec.Source,
-			PhaseName:      r.GetName(),
-			PhaseNamespace: r.GetNamespace()},
+			KubeClient:              f.kubeClient,
+			Renderer:                NewMMESimRenderer(ownerRefs, "mmesim", renderFiles, renderValues, r.Spec),
+			OwnerRefs:               ownerRefs,
+			PhaseName:               r.GetName(),
+			PhaseNamespace:          r.GetNamespace(),
+			Source:                  r.Spec.Source,
+			IsInstalledFlag:         false,
+			IsUpdateRequiredFlag:    false,
+			DeployedSubResourceList: nil,
+		},
 
 		spec:   r.Spec,
 		status: &r.Status,

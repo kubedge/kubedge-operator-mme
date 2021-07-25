@@ -18,45 +18,13 @@ import (
 	av1 "github.com/kubedge/kubedge-operator-base/pkg/apis/kubedgeoperators/v1alpha1"
 	bmgr "github.com/kubedge/kubedge-operator-base/pkg/kubedgemanager"
 
-	v1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/runtime"
 )
 
 type mmesimrenderer struct {
 	base bmgr.KubedgeBaseRenderer
 
 	spec av1.MMESimSpec
-}
-
-// Update the Unstructured read in the file using the content of the Spec.
-func (o mmesimrenderer) updateStatefulSet(u *unstructured.Unstructured, k *av1.KubedgeSetSpec) {
-	if k != nil {
-
-		out := v1.StatefulSet{}
-		err1 := runtime.DefaultUnstructuredConverter.FromUnstructured(u.UnstructuredContent(), &out)
-		if err1 != nil {
-			log.Error(err1, "error converting from Unstructured")
-		}
-
-		if k.Replicas != nil {
-			out.Spec.Replicas = k.Replicas
-		}
-
-		if k.Selector != nil {
-			out.Spec.Selector = k.Selector.DeepCopy()
-		}
-
-		out.Spec.Template = *(k.Template.DeepCopy())
-
-		unst, err2 := runtime.DefaultUnstructuredConverter.ToUnstructured(&out)
-		if err2 != nil {
-			log.Error(err2, "error converting to Unstructured")
-		}
-
-		u.SetUnstructuredContent(unst)
-	}
 }
 
 // Adds the ownerrefs to all the documents in a YAML file
@@ -75,13 +43,13 @@ func (o mmesimrenderer) RenderFile(name string, namespace string, fileName strin
 		if renderedResource.GetKind() == "StatefulSet" {
 			switch renderedResource.GetName() {
 			case ECFSB.String():
-				o.updateStatefulSet(&renderedResource, o.spec.FSBs)
+				o.base.UpdateStatefulSet(&renderedResource, o.spec.FSBs)
 			case ECGPB.String():
-				o.updateStatefulSet(&renderedResource, o.spec.GPBs)
+				o.base.UpdateStatefulSet(&renderedResource, o.spec.GPBs)
 			case ECLC.String():
-				o.updateStatefulSet(&renderedResource, o.spec.LCs)
+				o.base.UpdateStatefulSet(&renderedResource, o.spec.LCs)
 			case ECNCB.String():
-				o.updateStatefulSet(&renderedResource, o.spec.NCBs)
+				o.base.UpdateStatefulSet(&renderedResource, o.spec.NCBs)
 			}
 			updated.Items = append(updated.Items, renderedResource)
 		} else {
