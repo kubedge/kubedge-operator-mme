@@ -8,51 +8,51 @@ spec:
     type: local
     location: /opt/kubedge-operators/mmesim-templates/classic.yaml
   fsbs:
-    replicas: 4
+    replicas: 1
     selector:
       matchLabels:
-        name: fsb
+        app: fsb
     template:
       metadata:
         labels:
-          name: fsb
+          app: fsb
       spec:
         containers:
-        - name: fsb
+        - name: main
           image: hack4easy/mmesim-fsb-amd64:v0.1.0
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-fsb"]
           ports:
             - containerPort: 8082
   gpbs:
-    replicas: 2
+    replicas: 1
     selector:
       matchLabels:
-        name: gpb
+        app: gpb
     template:
       metadata:
         labels:
-          name: gpb
+          app: gpb
       spec:
         containers:
-        - name: gpb
+        - name: main
           image: hack4easy/mmesim-gpb-amd64:v0.1.0
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-gpb"]
           ports:
             - containerPort: 8083
   lcs:
-    replicas: 4
+    replicas: 1
     selector:
       matchLabels:
-        name: lc
+        app: lc
     template:
       metadata:
         labels:
-          name: lc
+          app: lc
       spec:
         containers:
-        - name: lc
+        - name: main
           image: hack4easy/mmesim-lc-amd64:v0.1.0
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-lc"]
@@ -62,14 +62,14 @@ spec:
     replicas: 1
     selector:
       matchLabels:
-        name: ncb
+        app: ncb
     template:
       metadata:
         labels:
-          name: ncb
+          app: ncb
       spec:
         containers:
-        - name: ncb
+        - name: main
           image: hack4easy/mmesim-ncb-amd64:v0.1.0
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-ncb"]
