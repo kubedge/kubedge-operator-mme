@@ -28358,6 +28358,10 @@ spec:
                     resourceVersion:
                       format: int32
                       type: integer
+                    severity:
+                      description: ConditionSeverity expresses the severity of a Condition
+                        Type failing.
+                      type: string
                     status:
                       description: KubedgeConditionStatus represents the current status
                         of a Condition
