@@ -3,10 +3,16 @@ sudo: true
 language: go
 
 go:
-  - "1.16.x"
+  - "1.17.x"
 
-service:
+services:
   - docker
+
+os:
+  - linux
+
+dist:
+  - focal
 
 env:
   - GO111MODULE=on
@@ -24,7 +30,7 @@ jobs:
       - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile .
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
-      - docker push $DHEALTHREPO
+      - docker push $DHEALTHREPO -a
     - stage: test docker image
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubedge-mme-operator-dev
