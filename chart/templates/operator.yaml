@@ -20,7 +20,7 @@ spec:
           image: {{ .Values.images.tags.operator }}
           command:
           - /usr/local/bin/kubedge-mme-operator
-          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          imagePullPolicy: {{ .Values.images.pull_policy }}
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
