@@ -73,7 +73,8 @@ func addMMESim(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to primary resource MMESim
 	// EnqueueRequestForObject enqueues a Request containing the Name and Namespace of the object
 	// that is the source of the Event. (e.g. the created / deleted / updated objects Name and Namespace).
-	err = c.Watch(&source.Kind{Type: &av1.MMESim{}}, &crthandler.EnqueueRequestForObject{})
+	// err = c.Watch(&source.Kind{Type: &av1.MMESim{}}, &crthandler.EnqueueRequestForObject{})
+	err = c.Watch(source.Kind(mgr.GetCache(), &av1.MMESim{}), &crthandler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
 	}
