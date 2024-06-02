@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.20
 
 ENV OPERATOR=/usr/local/bin/kubedge-mme-operator \
     USER_UID=1001 \
