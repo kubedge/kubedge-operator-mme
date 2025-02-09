@@ -129,5 +129,8 @@ install-arm32v7:
 install-arm64v8:
 	helm install kubedge-mme-operator chart --set images.tags.operator=${IMG_ARM64V8},images.pull_policy=Always --namespace ${K8S_NAMESPACE}
 
+install-gen:
+	helm install kubedge-mme-operator chart --set images.tags.operator=${IMG},images.pull_policy=Always --namespace ${K8S_NAMESPACE}
+
 purge: setup
 	helm delete kubedge-mme-operator

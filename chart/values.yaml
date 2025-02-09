@@ -21,7 +21,7 @@ release_group: null
 
 images:
   tags:
-    operator: kubedge1/kubedge-mme-operator-dev:v0.1.0
+    operator: kubedge1/kubedge-mme-operator:v0.2.0
   pull_policy: "IfNotPresent"
 
 labels: null

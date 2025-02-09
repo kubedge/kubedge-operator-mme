@@ -19,7 +19,7 @@ spec:
       spec:
         containers:
         - name: main
-          image: hack4easy/mmesim-fsb-dev:v0.2.24
+          image: hack4easy/mmesim-fsb:v0.2.24
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-fsb"]
           ports:
@@ -36,7 +36,7 @@ spec:
       spec:
         containers:
         - name: main
-          image: hack4easy/mmesim-gpb-dev:v0.2.24
+          image: hack4easy/mmesim-gpb:v0.2.24
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-gpb"]
           ports:
@@ -53,7 +53,7 @@ spec:
       spec:
         containers:
         - name: main
-          image: hack4easy/mmesim-lc-dev:v0.2.24
+          image: hack4easy/mmesim-lc:v0.2.24
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-lc"]
           ports:
@@ -70,7 +70,7 @@ spec:
       spec:
         containers:
         - name: main
-          image: hack4easy/mmesim-ncb-dev:v0.2.24
+          image: hack4easy/mmesim-ncb:v0.2.24
           imagePullPolicy: IfNotPresent
           command: ["/mmesim-ncb"]
           ports:
