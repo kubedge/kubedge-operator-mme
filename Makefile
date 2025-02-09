@@ -1,7 +1,8 @@
 
 # Image URL to use all building/pushing image targets
 COMPONENT        ?= kubedge-mme-operator
-VERSION_V1       ?= 0.1.0
+VERSION_V1       ?= 0.2.0
+DHUBREPO         ?= kubedge1/${COMPONENT}
 DHUBREPO_DEV     ?= kubedge1/${COMPONENT}-dev
 DHUBREPO_AMD64   ?= kubedge1/${COMPONENT}-amd64
 DHUBREPO_ARM32V7 ?= kubedge1/${COMPONENT}-arm32v7
@@ -11,7 +12,20 @@ IMG_DEV          ?= ${DHUBREPO_DEV}:v${VERSION_V1}
 IMG_AMD64        ?= ${DHUBREPO_AMD64}:v${VERSION_V1}
 IMG_ARM32V7      ?= ${DHUBREPO_ARM32V7}:v${VERSION_V1}
 IMG_ARM64V8      ?= ${DHUBREPO_ARM64V8}:v${VERSION_V1}
+IMG				 ?= ${DHUBREPO}:v${VERSION_V1}
 K8S_NAMESPACE    ?= default
+
+# CONTAINER_TOOL defines the container tool to be used for building images.
+# Be aware that the target commands are only tested with Docker which is
+# scaffolded by default. However, you might want to replace it to use other
+# tools. (i.e. podman)
+CONTAINER_TOOL ?= docker
+
+# Setting SHELL to bash allows bash commands to be executed by recipes.
+# Options are set to exit when a recipe line exits non-zero or a piped command fails.
+SHELL = /usr/bin/env bash -o pipefail
+.SHELLFLAGS = -ec
+
 
 all: docker-build
 
@@ -55,23 +69,35 @@ docker-build: fmt vet-v1 docker-build-dev docker-build-amd64 docker-build-arm32v
 
 docker-build-dev:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/kubedge-mme-operator -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
-	docker build . -f build/Dockerfile -t ${IMG_DEV}
+	docker buildx build --platform linux/amd64 -f build/Dockerfile.dev -t ${IMG_DEV} .
 	docker tag ${IMG_DEV} ${DHUBREPO_DEV}:latest
 
 docker-build-amd64:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/amd64/kubedge-mme-operator -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
-	docker build . -f build/Dockerfile.amd64 -t ${IMG_AMD64}
+	docker buildx build --platform linux/amd64 -f build/Dockerfile.amd64 -t ${IMG_AMD64} .
 	docker tag ${IMG_AMD64} ${DHUBREPO_AMD64}:latest
 
 docker-build-arm32v7:
 	GOOS=linux GOARM=7 GOARCH=arm CGO_ENABLED=0 go build -o build/_output/arm32v7/kubedge-mme-operator -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
-	docker build . -f build/Dockerfile.arm32v7 -t ${IMG_ARM32V7}
+	docker buildx build --platform linux/arm/v7 -f build/Dockerfile.arm32v7 -t ${IMG_ARM32V7} .
 	docker tag ${IMG_ARM32V7} ${DHUBREPO_ARM32V7}:latest
 
 docker-build-arm64v8:
 	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o build/_output/arm64v8/kubedge-mme-operator -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
-	docker build . -f build/Dockerfile.arm64v8 -t ${IMG_ARM64V8}
+	docker buildx build --platform linux/arm64 -f build/Dockerfile.arm64v8 -t ${IMG_ARM64V8} .
 	docker tag ${IMG_ARM64V8} ${DHUBREPO_ARM64V8}:latest
+
+PLATFORMS ?= linux/arm64,linux/amd64,linux/arm/v7
+.PHONY: docker-buildx
+docker-buildx: ## Build and push docker image for the manager for cross-platform support
+	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
+	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' build/Dockerfile.buildkit > Dockerfile.cross
+	- $(CONTAINER_TOOL) buildx create --name project-v3-builder
+	$(CONTAINER_TOOL) buildx use project-v3-builder
+	- $(CONTAINER_TOOL) buildx build --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
+	- $(CONTAINER_TOOL) buildx rm project-v3-builder
+	rm Dockerfile.cross
+
 
 # Push the docker image
 docker-push: docker-push-dev docker-push-amd64 docker-push-arm32v7 docker-push-arm64v8
