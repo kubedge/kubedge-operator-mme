@@ -54,7 +54,9 @@ func newMMESimReconciler(mgr manager.Manager) reconcile.Reconciler {
 		KubedgeBaseReconciler: bcontroller.KubedgeBaseReconciler{
 			Client:         mgr.GetClient(),
 			Scheme:         mgr.GetScheme(),
-			Recorder:       mgr.GetEventRecorderFor("mmesim-recorder"),
+			// KubedgeBaseReconciler.Recorder is a record.EventRecorder (old events API);
+			// the pinned base owns that field, so keep GetEventRecorderFor here.
+			Recorder:       mgr.GetEventRecorderFor("mmesim-recorder"), //nolint:staticcheck // base uses record.EventRecorder
 			ManagerFactory: mmesimmgr.NewManagerFactory(mgr),
 			// reconcilePeriod: flags.ReconcilePeriod,
 		},

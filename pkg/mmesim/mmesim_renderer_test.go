@@ -59,7 +59,7 @@ func TestMMESIMRenderer(t *testing.T) {
 
 	for _, toCreate := range rendered.Items {
 		blob, _ := yaml.Marshal(toCreate.UnstructuredContent())
-		thestr := fmt.Sprintf("%s", string(blob))
+		thestr := string(blob)
 		// t.Logf("%s", thestr)
 		fmt.Println("---")
 		fmt.Println(thestr)
