@@ -1,20 +1,30 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Role: CONSUMER in the kubedge OPERATOR family. Reconciles the MMESim CRD and imports
+  the shared code from kubedge-operator-base. Near-clone of kubedge-operator-ecds (same
+  base, controller, and Makefile shape) — differs only by domain kind + deployed workload.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Dependency (by convention — OpenSpec has no cross-repo link):
+    - Compile-time: consumes github.com/kubedge/kubedge-operator-base capabilities
+      shared-crd-kinds (MMESim type + common model), kubedgemanager-engine, base-reconciler.
+      CURRENT pin v0.1.29-kubedge.20240602 → REALIGN to v0.1.36-kubedge.20260815.
+    - Runtime/deploy (Note 15): DEPLOYS its paired simulator kubedge-sim-mme — the MMESim
+      CR references hack4easy/mmesim-<component>:<ver> images (fsb/gpb/…). operator-mme ⟷
+      kubedge-sim-mme are a matched pair.
+
+  Tech / build:
+    - K8s operator, Go, legacy operator-sdk-v0 layout; PROJECT version "1".
+    - Verify with raw `go build/vet/test ./...`. `make generate` has the SAME landmines as
+      ecds (Note 8): removed `crd:trivialVersions=true` flag + `/usr/local/kubebuilder/bin`
+      assumption — fixed by change standardize-codegen.
+    - Images: arm64 (Pi armv8 + Apple-Silicon) via buildx multi-arch; run gate =
+      build → deploy → confirm start → undeploy (needs the paired mme sim images).
+
+  Bring-up order: realign-to-base FIRST, then adopt-go-ci, standardize-codegen,
+  buildx-multiarch-image, container-run-smoke, test-coverage-uplift.
+
+rules:
+  spec:
+    - Describe CURRENT behavior; do not spec aspirational features.
+    - Reference the consumed base capability + tag, and the paired sim, when behavior depends on them.
