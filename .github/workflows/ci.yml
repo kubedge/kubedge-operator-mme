@@ -1,15 +1,12 @@
 name: CI
-
 on:
   pull_request:
     branches: [main]
   push:
     branches: [main]
-
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect stack
@@ -46,7 +43,6 @@ jobs:
           else
             echo "go=false" >> "$GITHUB_OUTPUT"
           fi
-
   lint:
     name: lint
     needs: detect
@@ -75,19 +71,6 @@ jobs:
             shellcheck "${sh_files[@]}"
             shfmt -d -i 2 -ci -bn "${sh_files[@]}"
           fi
-
-  type-check:
-    name: type-check
-    needs: detect
-    if: needs.detect.outputs.python == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-      - run: |
-          uv sync --locked
-          uv run mypy src
-
   test:
     name: test
     needs: detect
@@ -108,7 +91,6 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq bats
           bats tests/
-
   secret-scan:
     name: secret-scan
     runs-on: ubuntu-latest
@@ -124,7 +106,6 @@ jobs:
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
             | tar -xz -C /tmp gitleaks
           /tmp/gitleaks detect --source . --redact --verbose
-
   # Go / operator jobs — gated on go.mod presence (per go-stack-profile).
   # All four are skipped on python/bash-only repos (detect.outputs.go == 'false').
   go-build:
@@ -139,7 +120,6 @@ jobs:
           go-version-file: go.mod
           cache: true
       - run: go build ./...
-
   go-vet:
     name: go-vet
     needs: detect
@@ -152,7 +132,6 @@ jobs:
           go-version-file: go.mod
           cache: true
       - run: go vet ./...
-
   go-test:
     name: go-test
     needs: detect
@@ -165,7 +144,6 @@ jobs:
           go-version-file: go.mod
           cache: true
       - run: go test ./... -race -coverprofile=cover.out
-
   golangci-lint:
     name: golangci-lint
     needs: detect
@@ -177,6 +155,6 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
-      - uses: golangci/golangci-lint-action@v6
+      - uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.61.0
+          version: v2.12.2

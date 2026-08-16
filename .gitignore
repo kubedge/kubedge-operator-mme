@@ -5,7 +5,6 @@
 *.dll
 *.so
 *.dylib
-bin/*
 build/_output/*
 Dockerfile.cross
 
@@ -31,3 +30,6 @@ go.work
 .DS_Store
 .DS_Store
 .DS_Store
+
+# claude-meta session scratch (RETROFIT worklist, resume notes, feedback)
+.local/
