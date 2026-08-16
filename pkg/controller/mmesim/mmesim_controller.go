@@ -28,6 +28,7 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	crthandler "sigs.k8s.io/controller-runtime/pkg/handler"
@@ -74,7 +75,7 @@ func addMMESim(mgr manager.Manager, r reconcile.Reconciler) error {
 	// EnqueueRequestForObject enqueues a Request containing the Name and Namespace of the object
 	// that is the source of the Event. (e.g. the created / deleted / updated objects Name and Namespace).
 	// err = c.Watch(&source.Kind{Type: &av1.MMESim{}}, &crthandler.EnqueueRequestForObject{})
-	err = c.Watch(source.Kind(mgr.GetCache(), &av1.MMESim{}), &crthandler.EnqueueRequestForObject{})
+	err = c.Watch(source.Kind(mgr.GetCache(), client.Object(&av1.MMESim{}), &crthandler.EnqueueRequestForObject{}))
 	if err != nil {
 		return err
 	}

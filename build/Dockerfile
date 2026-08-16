@@ -25,5 +25,5 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
 FROM scratch
 COPY --from=builder /out/kubedge-mme-operator /usr/local/bin/kubedge-mme-operator
 COPY build/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY build/mme-templates /opt/kubedge-operators/mme-templates
+COPY build/mmesim-templates /opt/kubedge-operators/mmesim-templates
 CMD ["/usr/local/bin/kubedge-mme-operator"]
