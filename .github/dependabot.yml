@@ -1,0 +1,19 @@
+# Stack-agnostic base. This file ships to every project and carries only the
+# `github-actions` ecosystem, which every stack has. Each stack scaffolder
+# (meta/bootstrap/stacks/*.sh) APPENDS the ecosystem matching --stack after the
+# templates are rsynced: python -> uv, go -> gomod, bash -> nothing further.
+#
+# Never add `pip` or `npm` here: a project without the corresponding manifest
+# red-fails on every Dependabot run, and standing red trains operators to
+# ignore Dependabot output — which is how a real advisory gets missed.
+#
+# Propagation class M (see scaffolding/propagation-policy.yaml): the block
+# below is merge-propagated, and the stack block a project appended locally
+# survives the 3-way merge as a local addition.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
