@@ -1,0 +1,6 @@
+# This Go repo has no Python of its own. The Python here is the claude-meta delivery
+# (requires-python >=3.14, run via `uv run --script`) and is linted meta-side, so the
+# pre-commit ruff hooks skip it. force-exclude makes the excludes apply to the file
+# names pre-commit passes explicitly.
+force-exclude = true
+extend-exclude = [".agents", "plugins", ".claude", "bin/*.py"]
