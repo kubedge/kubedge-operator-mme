@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"time"
 
 	av1 "github.com/kubedge/kubedge-operator-base/pkg/apis/kubedgeoperators/v1alpha1"
 	bcontroller "github.com/kubedge/kubedge-operator-base/pkg/controller/kubedgecontroller"
@@ -52,8 +53,8 @@ func AddMMESimController(mgr manager.Manager) error {
 func newMMESimReconciler(mgr manager.Manager) reconcile.Reconciler {
 	r := &MMESimReconciler{
 		KubedgeBaseReconciler: bcontroller.KubedgeBaseReconciler{
-			Client:         mgr.GetClient(),
-			Scheme:         mgr.GetScheme(),
+			Client: mgr.GetClient(),
+			Scheme: mgr.GetScheme(),
 			// KubedgeBaseReconciler.Recorder is a record.EventRecorder (old events API);
 			// the pinned base owns that field, so keep GetEventRecorderFor here.
 			Recorder:       mgr.GetEventRecorderFor("mmesim-recorder"), //nolint:staticcheck // base uses record.EventRecorder
@@ -153,6 +154,10 @@ type MMESimReconciler struct {
 
 const (
 	finalizerMMESim = "uninstall-mmesim-resource"
+
+	// finalizerRequeueDelay replaces the deprecated Result.Requeue: a finalizer
+	// update does not change metadata.generation, so reconcile again shortly.
+	finalizerRequeueDelay = time.Second
 )
 
 // Reconcile reads that state of the cluster for an MMESim object and
@@ -189,7 +194,7 @@ func (r *MMESimReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 	var shouldRequeue bool
 	if shouldRequeue, err = r.updateFinalizers(instance); shouldRequeue {
 		// Need to requeue because finalizer update does not change metadata.generation
-		return reconcile.Result{Requeue: true}, err
+		return reconcile.Result{RequeueAfter: finalizerRequeueDelay}, err
 	}
 
 	if err := r.ensureSynced(mgr, instance); err != nil {
@@ -203,7 +208,7 @@ func (r *MMESimReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 	if instance.IsDeleted() {
 		if shouldRequeue, err = r.deleteMMESim(mgr, instance); shouldRequeue {
 			// Need to requeue because finalizer update does not change metadata.generation
-			return reconcile.Result{Requeue: true}, err
+			return reconcile.Result{RequeueAfter: finalizerRequeueDelay}, err
 		}
 		return reconcile.Result{}, err
 	}
